@@ -6,4 +6,11 @@ var GroupSchema = mongoose.Schema({
     thingSpeak: Number,
 });
 
+GroupSchema.methods.toJSON = function () {
+    var obj = this.toObject();
+    delete obj.password;
+    delete obj.__v;
+    return obj;
+};
+  
 module.exports = mongoose.model('Group', GroupSchema);
