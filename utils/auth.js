@@ -11,3 +11,15 @@ exports.createToken = async function (group) {
     );
     return token;
 }
+
+exports.validateToken = async function (token) {
+    try {
+        await jwt.verify(token, config.secret);
+        return true;
+    }
+    catch(err)
+    {
+        console.log('token invalid');
+        return false;
+    }
+};
