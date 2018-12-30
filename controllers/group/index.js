@@ -6,11 +6,26 @@ const auth = require('../../utils/auth');
 
 exports.signup = async function (req, res) {
     try {
-        let newGroup = req.body;
-        let password = newGroup.password;
-        newGroup.password = await bcrypt.hash(password, config.saltRounds);
-        await Group.create(newGroup);
-        return res.status(200).send();
+        let name = req.body.name;
+        let password = req.body.password;
+        let thingspeak = req.body.thingspeak;
+        let members = req.body.members;
+
+        password = await bcrypt.hash(password, config.saltRounds);
+
+        let group = await Group.findOne({ name: name })
+        if(group) {
+            return res.status(422).send();
+        }
+        else {
+            let madeGroup = await Group.create({ name: name, password: password, thingspeak: thingspeak});
+            await Promise.all(
+                members.map(async function (member) {
+                    await GroupMember.create( {group: madeGroup, name: member.value });
+                })
+            )
+            return res.status(200).send();
+        }
     }
     catch(err) {
         console.log(err);
