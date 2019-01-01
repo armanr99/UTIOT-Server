@@ -15,6 +15,7 @@ exports.signup = async function (req, res) {
 
         let group = await Group.findOne({ name: name })
         if(group) {
+            res.statusMessage = "Group name already exists!";
             return res.status(422).send();
         }
         else {
@@ -29,6 +30,7 @@ exports.signup = async function (req, res) {
     }
     catch(err) {
         console.log(err);
+        res.statusMessage = "Signup Failed!";
         return res.status(500).send();
     }
 }
@@ -52,15 +54,18 @@ exports.login = async function(req, res) {
                 )
             }
             else {
+                res.statusMessage = "Wrong username or password!";
                 return res.status(401).send();
             }
         }
         else {
+            res.statusMessage = "Wrong username or password!";
             return res.status(401).send();
         }
     }
     catch(err) {
         console.log(err);
+        res.statusMessage = "Login Failed!";
         return res.status(500).send();
     }
 }
