@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 var GroupSchema = mongoose.Schema({
     name: { type: String, require: true },
     password: { type: String, require: true },
-    thingSpeak: Number,
+    thingspeak: Number,
 });
 
 GroupSchema.methods.toJSON = function () {
